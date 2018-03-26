@@ -1,6 +1,6 @@
 body {
     font-family: Arial, Helvetica, sans-serif;
-    color: darkblue
+    color: darkblue;
 }
 .grid-container {
     display: grid;
@@ -8,17 +8,12 @@ body {
     grid-gap: 20px;
     grid-template-columns: 1fr 2fr 1fr;
     grid-template-rows: 2fr 4fr 1fr;
-    padding: 10px
+    padding: 10px;
 }
 
 .grid-container > div {
     background-color: blueviolet;
     text-align: center;
-    vertical-align: 
     padding: 20px 0;
     font-size: 30px;
-}
-
-.item1 {
-    
 }
