@@ -1,33 +1,41 @@
-var canvass;
+//Canvas variables
+var canvas;
 var canvasContext;
-var ballX = 200;
-var ballSpeedX = 10;
-var ballY = 100;
-var ballSpeedY = 3;
-var ballSize = 6;
+
+//Ball variables
+var ballX = 400;
+var ballSpeedX = 20;
+var ballY = 200;
+var ballSpeedY = 6;
+var ballSize = 12;
+
+//Player 1 variables
 var leftPaddleX = 0;
-var leftPaddleY = 150;
-var leftPaddleW = 7;
-var leftPaddleH = 50;
+var leftPaddleY = 250;
+var leftPaddleW = 14;
+var leftPaddleH = 100;
 var paddleVOffset = 5;
 
-var rightPaddleX = 400 - leftPaddleX - leftPaddleW;
-var rightPaddleY = 150;
-var rightPaddleW = 7;
-var rightPaddleH = 50;
+//Player 2 variables
+var rightPaddleX = 800 - leftPaddleX - leftPaddleW;
+var rightPaddleY = 250;
+var rightPaddleW = 14;
+var rightPaddleH = 100;
 
+//Score variables
 var leftScore = 0;
 var rightScore = 0;
 const WINNING_SCORE = 3;
 var actionPaused = false;
 var showingWinScreen = false;
 
+//Event handlers
 
 function calculateMousePos(evt) {
     var rect = canvas.getBoundingClientRect();
     var root = document.documentElement;
-    var mouseX = evt.clientX - rect.left - root.scrollLeft;
-    var mouseY = evt.clientY - rect.top - root.scrollTop;
+    var mouseX = (evt.clientX - rect.left - root.scrollLeft) * (canvas.width / canvas.clientWidth);
+    var mouseY = (evt.clientY - rect.top - root.scrollTop) * (canvas.width / canvas.clientWidth);
     return {
         x: mouseX,
         y: mouseY
@@ -43,6 +51,7 @@ function handleMouseClick(evt) {
         actionPaused = false;
     }
 }
+
 
 window.onload = function () {
 
@@ -63,6 +72,7 @@ window.onload = function () {
             //if (leftPaddleY < paddleVOffset) { leftPaddleY = paddleVOffset }
             //rightPaddleY = mousePos.y - rightPaddleH / 2;
             //document.getElementById('infobox').innerText = "leftPaddleY = " + leftPaddleY;
+            //document.getElementById('infobox').innerHTML = ("canvas.width = " + canvas.width + " ; <br>canvas.clientWidth = " + canvas.clientWidth + " ;<br> canvas.height = " + canvas.height + " ;<br> canvas.clientHeight = " + canvas.clientHeight + " ;<br> mouseX = " + mousePos.x + " ;<br> mouseY = " + mousePos.y);
         });
 
     canvas.addEventListener('mousedown', handleMouseClick);
@@ -70,7 +80,7 @@ window.onload = function () {
 
     canvas.addEventListener('touchmove', function (evt) {
         var touchobj = evt.touches[0];
-        leftPaddleY = parseInt(touchobj.clientY) - leftPaddleH / 2;
+        leftPaddleY = (parseInt(touchobj.clientY) - leftPaddleH / 2) * (canvas.width / canvas.clientWidth);
         //if (leftPaddleY > canvas.height - paddleVOffset) { leftPaddleY = canvas.height - paddleVOffset }
         //if (leftPaddleY < paddleVOffset) { leftPaddleY = paddleVOffset }
         //rightPaddleY = parseInt(touchobj.clientY);
@@ -89,16 +99,16 @@ function ballReset() {
     ballX = canvas.width / 2;
     ballY = canvas.height / 2;
     ballSpeedX = -ballSpeedX;
-    ballSpeedY = Math.floor(Math.random() * 6) - 3;
+    ballSpeedY = Math.floor(Math.random() * 12) - 6;
 
 }
 
 function p2movement() {
     var rightPaddleYcentre = rightPaddleY + rightPaddleH / 2;
-    if (rightPaddleYcentre < ballY - 17.5) {
-        rightPaddleY += 3;
-    } else if (rightPaddleYcentre > ballY + 17.5) {
-        rightPaddleY -= 3;
+    if (rightPaddleYcentre < ballY - 35) {
+        rightPaddleY += 6;
+    } else if (rightPaddleYcentre > ballY + 35) {
+        rightPaddleY -= 6;
     }
     //if (rightPaddleY > canvas.height - paddleVOffset) { rightPaddleY = canvas.height - paddleVOffset }
     //if (rightPaddleY < paddleVOffset) { rightPaddleY = paddleVOffset }
@@ -152,8 +162,8 @@ function moveAll() {
 }
 
 function drawNet() {
-    for (var i = 0; i < canvas.height; i += 20) {
-        roundRect(canvas.width / 2 - 2, i, 4, 10, 2, 'white')
+    for (var i = 0; i < canvas.height; i += 40) {
+        roundRect(canvas.width / 2 - 4, i, 8, 20, 4, 'white')
     }
 }
 
@@ -161,36 +171,35 @@ function drawAll() {
 
     //Fill cavnvas to blank screen
     colourRect(0, 0, canvas.width, canvas.height, 'white');
-    roundRect(0, 0, canvas.width, canvas.height, 20, 'black');
+    roundRect(0, 0, canvas.width, canvas.height, 40, 'black');
 
     drawNet();
 
     if (showingWinScreen) {
 
         if (rightScore >= WINNING_SCORE) {
-            colourText("Player 1 wins!", 35, 75, '20px', 'yellow');
+            colourText("Player 1 wins!", 70, 150, '40px', 'yellow');
         } else {
-            colourText("Player 2 wins!", 230, 75, '20px', 'yellow');
+            colourText("Player 2 wins!", 460, 150, '40px', 'yellow');
         }
-        colourText("Click to continue!", 40, 175, '15px', 'green');
+        colourText("Click to continue!", 80, 350, '30px', 'green');
         return;
     }
     //Draw ball
     colourBall(ballX, ballY, ballSize, 'red');
+
     //Draw left paddle
-    roundRect(leftPaddleX, leftPaddleY, leftPaddleW, leftPaddleH, 3, 'white');
+    roundRect(leftPaddleX, leftPaddleY, leftPaddleW, leftPaddleH, 6, 'white');
 
     //Draw right paddle
-    roundRect(rightPaddleX, rightPaddleY, rightPaddleW, rightPaddleH, 3, 'white');
-
-
+    roundRect(rightPaddleX, rightPaddleY, rightPaddleW, rightPaddleH, 6, 'white');
 
     //Draw score text
-    colourText(rightScore, 90, 75, '20px', 'yellow');
-    colourText(leftScore, canvas.width - 110, 75, '20px', 'yellow');
+    colourText(rightScore, 180, 150, '40px', 'yellow');
+    colourText(leftScore, canvas.width - 220, 150, '40px', 'yellow');
 
     if (actionPaused) {
-        colourText("Click to continue!", 40, 175, '15px', 'lawngreen');
+        colourText("Click to continue!", 80, 350, '30px', 'lawngreen');
         return;
     }
 
