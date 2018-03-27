@@ -4,7 +4,7 @@ var canvasContext;
 
 //Ball variables
 var ballX = 400;
-var ballSpeedX = 20;
+var ballSpeedX = -20;
 var ballY = 200;
 var ballSpeedY = 6;
 var ballSize = 12;
@@ -26,7 +26,7 @@ var rightPaddleH = 100;
 var leftScore = 0;
 var rightScore = 0;
 const WINNING_SCORE = 3;
-var actionPaused = false;
+var actionPaused = true;
 var showingWinScreen = false;
 
 //Event handlers
