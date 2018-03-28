@@ -186,13 +186,13 @@ function drawAll() {
 
     //Draw left paddle and score
     roundRect(leftPaddleX, leftPaddleY, leftPaddleW, leftPaddleH, 10, 'white');
-    textImpact(rightScore[0], 400, 225, '300px', 'white','right'); // This game
-    textImpact(rightScore[1], 360, 45, '50px', 'black','right');  // Game counter
+    textImpact(rightScore[0], 390, 225, '300px', 'white','right'); // This game
+    textImpact(rightScore[1], 380, 45, '50px', 'black','right');  // Game counter
 
     //Draw right paddle and score
     roundRect(rightPaddleX, rightPaddleY, rightPaddleW, rightPaddleH, 10, 'white');
-    textImpact(leftScore[0], canvas.width-400, 625, '300px', 'white', 'left'); // This game
-    textImpact(leftScore[1], canvas.width-360, 600, '50px', 'black', 'left');  // Game counter
+    textImpact(leftScore[0], canvas.width-390, 625, '300px', 'white', 'left'); // This game
+    textImpact(leftScore[1], canvas.width-380, 600, '50px', 'black', 'left');  // Game counter
 
     switch (showingWinScreen) {
 
@@ -254,8 +254,13 @@ function roundRect(x, y, w, h, r, colour) {
 function textImpact(text, x, y, size, colour, align) {
     with (canvasContext) {
         fillStyle = colour;
-        font = size + " Impact, Anton, Charcoal, sans-serif";
+        font = size + " Anton, Impact, sans-serif";
         textAlign = align;
+        strokeStyle = 'white';
+        lineWidth = 5;
+        strokeText(text, x, y);
+        strokeStyle = 0;
+        lineWidth = 0;
         fillText(text, x, y);
     }
 }
