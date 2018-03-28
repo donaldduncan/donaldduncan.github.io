@@ -22,11 +22,12 @@ var rightPaddleW = leftPaddleW;
 var rightPaddleH = 100;
 
 //Score variables
-var leftScore = 0;
-var rightScore = 0;
+var leftScore = [ 0, 0 ];
+var rightScore = [ 0, 0 ];
 const WINNING_SCORE = 3;
 var actionPaused = true;
-var showingWinScreen = false;
+var showingWinScreen = 0;
+var level = 1
 
 //Event handlers
 
@@ -43,8 +44,8 @@ function calculateMousePos(evt) {
 
 function handleMouseClick(evt) {
     if (showingWinScreen) {
-        leftScore = 0;
-        rightScore = 0;
+        leftScore[0] = 0;
+        rightScore[0] = 0;
         showingWinScreen = false;
     } else if (actionPaused) {
         actionPaused = false;
@@ -89,9 +90,12 @@ window.onload = function () {
     });
 }
 function ballReset() {
-    if (rightScore >= WINNING_SCORE ||
-        leftScore >= WINNING_SCORE) {
-        showingWinScreen = true;
+    if (rightScore[0] >= WINNING_SCORE) {
+        rightScore[1]++
+        showingWinScreen = 1
+    } else if (leftScore[0] >= WINNING_SCORE) {
+        leftScore[1]++
+        showingWinScreen = 2;
     } else {
         actionPaused = true;
     }
@@ -106,16 +110,16 @@ function ballReset() {
 function p2movement() {
     var rightPaddleYcentre = rightPaddleY + rightPaddleH / 2;
     if (rightPaddleYcentre < ballY - 35) {
-        rightPaddleY += 10;
+        rightPaddleY += 5 * level;
     } else if (rightPaddleYcentre > ballY + 35) {
-        rightPaddleY -= 10;
+        rightPaddleY -= 5 * level;
     }
     //if (rightPaddleY > canvas.height - paddleVOffset) { rightPaddleY = canvas.height - paddleVOffset }
     //if (rightPaddleY < paddleVOffset) { rightPaddleY = paddleVOffset }
 }
 
 function moveAll() {
-    if (showingWinScreen || actionPaused) { return; }
+    if (showingWinScreen > 0 || actionPaused) { return; }
 
     ballY += ballSpeedY
     ballX += ballSpeedX;
@@ -134,7 +138,7 @@ function moveAll() {
         } else if(ballX > canvas.width - rightPaddleX &&
                   ballX < canvas.width) {
         } else if (ballX > canvas.width) {
-            rightScore++;
+            rightScore[0]++;
             ballReset();
         }
 
@@ -150,7 +154,7 @@ function moveAll() {
         } else if(ballX < 0 + leftPaddleX + leftPaddleW &&
                   ballX > 0) {
         } else if (ballX < 0) {
-            leftScore++;
+            leftScore[0]++;
             ballReset();
         }
 
@@ -182,21 +186,27 @@ function drawAll() {
 
     //Draw left paddle and score
     roundRect(leftPaddleX, leftPaddleY, leftPaddleW, leftPaddleH, 10, 'white');
-    textImpact(rightScore, 400, 225, '300px', 'white','right');
+    textImpact(rightScore[0], 400, 225, '300px', 'white','right'); // This game
+    textImpact(rightScore[1], 360, 45, '50px', 'black','right');  // Game counter
 
     //Draw right paddle and score
     roundRect(rightPaddleX, rightPaddleY, rightPaddleW, rightPaddleH, 10, 'white');
-    textImpact(leftScore, canvas.width-400, 625, '300px', 'white', 'left');
+    textImpact(leftScore[0], canvas.width-400, 625, '300px', 'white', 'left'); // This game
+    textImpact(leftScore[1], canvas.width-360, 600, '50px', 'black', 'left');  // Game counter
 
-    if (showingWinScreen) {
+    switch (showingWinScreen) {
 
-        if (rightScore >= WINNING_SCORE) {
-            textArial("Player 1 wins!", 400, 225, '40px', 'white', 'left');
-        } else {
-            textArial("Player 2 wins!", 400, 450, '40px', 'white', 'right');
-        }
-        textArial("Click to play again!", 400, 325, '50px', 'lawngreen', 'center');
-        return;
+        case 1:
+            textArial("Player 1 wins!", 420, 45, '40px', 'white', 'left');
+            textArial("Click to play again!", 400, 325, '50px', 'lawngreen', 'center');
+            return;
+            break;
+
+        case 2:
+            textArial("Player 2 wins!", 380, 580, '40px', 'white', 'right');
+            textArial("Click to play again!", 400, 325, '50px', 'lawngreen', 'center');
+            return;
+            break;
     }
 
     if (actionPaused) {
