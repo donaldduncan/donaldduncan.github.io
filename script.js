@@ -254,7 +254,7 @@ function roundRect(x, y, w, h, r, colour) {
 function textImpact(text, x, y, size, colour, align) {
     with (canvasContext) {
         fillStyle = colour;
-        font = size + " Impact, Charcoal, sans-serif";
+        font = size + " Impact, Anton, Charcoal, sans-serif";
         textAlign = align;
         fillText(text, x, y);
     }
