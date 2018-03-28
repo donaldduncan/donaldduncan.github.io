@@ -26,6 +26,7 @@ body {
     display: block;
     width: 70%;
     padding-bottom: 100%;
+    -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
 }
 
 @media (min-width: 1143px) {

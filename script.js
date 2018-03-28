@@ -77,7 +77,7 @@ window.onload = function () {
         });
 
     canvas.addEventListener('mousedown', handleMouseClick);
-    canvas.addEventListener('touchstart', handleMouseClick);
+    canvas.addEventListener('touchstart', handleMouseClick, true);
 
     canvas.addEventListener('touchmove', function (evt) {
         var touchobj = evt.touches[0];
