@@ -50,6 +50,7 @@ function handleMouseClick(evt) {
     } else if (actionPaused) {
         actionPaused = false;
     }
+    evt.preventDefault();
 }
 
 
