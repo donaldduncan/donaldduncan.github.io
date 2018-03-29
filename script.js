@@ -90,6 +90,7 @@ window.onload = function () {
         evt.preventDefault();
     }, true);
 }
+
 function ballReset() {
     if (rightScore[0] >= WINNING_SCORE) {
         rightScore[1]++
