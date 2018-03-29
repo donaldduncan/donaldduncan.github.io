@@ -4,7 +4,7 @@ var ctx;
 
 //Ball variables
 var ballX = 400;
-var ballSpeedX = -10;
+var ballSpeedX = -5;
 var ballY = 200;
 var ballSpeedY = 4;
 var ballSize = 12;
@@ -96,15 +96,16 @@ window.onload = function () {
 
 
 function ballReset() {
-    if (p2Score[0] >= WINNING_SCORE) {
-        p2Score[1]++
-        gameLevel++
-        if (gameLevel > gameLevelHighest) { gameLevelHighest++ }
-        winScreen = 1
-    } else if (p1Score[0] >= WINNING_SCORE) {
+    if (p1Score[0] >= WINNING_SCORE) {
         p1Score[1]++
+        gameLevel++
+        ballSpeedX-=0.1;
+        if (gameLevel > gameLevelHighest) { gameLevelHighest++ }
+        winScreen = 1;
+    } else if (p2Score[0] >= WINNING_SCORE) {
+        p2Score[1]++
         winScreen = 2;
-        if (gameLevel !== 1) { gameLevel-- }
+        if (gameLevel !== 1) { ballSpeedX-=0.1; gameLevel--; }
     } else {
         gamePaused = true;
     }
@@ -126,9 +127,9 @@ function p2movement() {
 }
 
 function moveAll() {
-    if (winScreen > 0 || gamePaused) { return; }
+    if (winScreen || gamePaused) { return; }
 
-    ballY += ballSpeedY
+    ballY += ballSpeedY;
     ballX += ballSpeedX;
 
     p2movement();
@@ -139,12 +140,12 @@ function moveAll() {
         ballSpeedX = -ballSpeedX;
 
         var deltaY = ballY - (p2Y + p2H / 2);
-        ballSpeedY = deltaY * 0.3;
+        ballSpeedY = deltaY * 0.15;
 
     } else if (ballX > canvas.width - p2X &&
         ballX < canvas.width) {
     } else if (ballX > canvas.width) {
-        p2Score[0]++;
+        p1Score[0]++;
         ballReset();
     }
 
@@ -161,7 +162,7 @@ function moveAll() {
     } else if (ballX < 0 + p1X + p1W &&
         ballX > 0) {
     } else if (ballX < 0) {
-        p1Score[0]++;
+        p2Score[0]++;
         ballReset();
     }
 
@@ -197,26 +198,29 @@ function drawAll() {
     roundRect(p2X, p2Y, p2W, p2H, 10, 'white');
     //textImpact(leftScore[1], canvas.width-380, 600, '50px', 'black', 'left');  // Game counter
 
-    //Draw score stuff
-    textImpact(p2Score[0], 390, 225, '300px', 'white', 'right', 'white', 0);
-    textImpact(p1Score[0], canvas.width - 390, 625, '300px', 'white', 'left');
-    textImpact("Level: " + gameLevel, 400, 50, '40px', 'goldenrod', 'center', 'white', 5);
-    textImpact("Best: " + gameLevelHighest, 400, 75, '20px', 'white', 'center', 'black', 3);
-
+    
     if (winScreen == 1) {
-        textArial("Player 1 wins!", 420, 250, '40px', 'white', 'left');
-        textArial("Click to play again!", 400, 325, '50px', 'lawngreen', 'center');
+        textArial("Player 1 wins!", 410, 225, '40px', 'white', 'left',0,1);
+        textArial("Click to play again!", 400, 300, '50px', 'lawngreen', 'center', 'black', 5);
+        textImpact(p1Score[0], 397, 225, '300px', 'black', 'right', 'white', 5);
+        textImpact(p2Score[0], canvas.width - 397, 625, '300px', 'black', 'left', 'white', 5);
+        return;
     } else if (winScreen == 2) {
-        textArial("Player 2 wins!", 380, 580, '40px', 'white', 'right');
-        textArial("Click to play again!", 400, 325, '50px', 'lawngreen', 'center');
-    } else {
-        textImpact(p2Score[0], 390, 225, '300px', 'black', 'right', 'white', 1);
-        textImpact(p1Score[0], canvas.width - 390, 625, '300px', 'black', 'left', 'white', 1);
+        textArial("Player 2 wins!", 390, 580, '40px', 'white', 'right', 0,1);
+        textArial("Click to play again!", 400, 300, '50px', 'lawngreen', 'center', 'black', 5);
+        textImpact(p1Score[0], 397, 225, '300px', 'black', 'right', 'white', 5);
+        textImpact(p2Score[0], canvas.width - 397, 625, '300px', 'black', 'left', 'white', 5);
         return;
     }
 
+    //Draw score stuff
+    textImpact(p1Score[0], 397, 225, '300px', 'white', 'right', 'white', 0);
+    textImpact(p2Score[0], canvas.width - 397, 625, '300px', 'white', 'left');
+    textImpact("Level: " + gameLevel, 400, 50, '40px', 'goldenrod', 'center', 'white', 5);
+    textImpact("Best: " + gameLevelHighest, 400, 75, '20px', 'white', 'center', 'black', 3);
+
     if (gamePaused) {
-        textArial("Click to continue!", 400, 325, '50px', 'lawngreen', 'center');
+        textArial("Click to continue!", 400, 325, '50px', 'lawngreen', 'center', 'black', 5);
         return;
     }
 
@@ -271,11 +275,16 @@ function textImpact(text, x, y, size, colour, align, lineColour, lWidth) {
     }
 }
 
-function textArial(text, x, y, size, colour, align) {
+function textArial(text, x, y, size, colour, align, lineColour, lWidth) {
     with (ctx) {
         fillStyle = colour;
         font = size + " Arial, Helvetica, sans-serif";
         textAlign = align;
+        strokeStyle = lineColour;
+        lineWidth = lWidth;
+        strokeText(text, x, y);
+        strokeStyle = 0;
+        lineWidth = 0;
         fillText(text, x, y);
     }
 }
