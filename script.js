@@ -27,7 +27,9 @@ var rightScore = [ 0, 0 ];
 const WINNING_SCORE = 3;
 var actionPaused = true;
 var showingWinScreen = 0;
-var level = 1
+var level = 1;
+var accumulator = 1;
+var difficulty = 1
 
 //Event handlers
 
@@ -94,10 +96,13 @@ window.onload = function () {
 function ballReset() {
     if (rightScore[0] >= WINNING_SCORE) {
         rightScore[1]++
+        level++
+        if (level > accumulator) { accumulator++ }
         showingWinScreen = 1
     } else if (leftScore[0] >= WINNING_SCORE) {
         leftScore[1]++
         showingWinScreen = 2;
+        if (level !== 1) { level-- }
     } else {
         actionPaused = true;
     }
@@ -112,9 +117,9 @@ function ballReset() {
 function p2movement() {
     var rightPaddleYcentre = rightPaddleY + rightPaddleH / 2;
     if (rightPaddleYcentre < ballY - 35) {
-        rightPaddleY += 5 * level;
+        rightPaddleY += difficulty * level;
     } else if (rightPaddleYcentre > ballY + 35) {
-        rightPaddleY -= 5 * level;
+        rightPaddleY -= difficulty * level;
     }
     //if (rightPaddleY > canvas.height - paddleVOffset) { rightPaddleY = canvas.height - paddleVOffset }
     //if (rightPaddleY < paddleVOffset) { rightPaddleY = paddleVOffset }
@@ -128,10 +133,10 @@ function moveAll() {
 
     p2movement();
 
-    if (ballX > rightPaddleX - rightPaddleW &&
-        ballX < rightPaddleX &&
-        ballY > rightPaddleY - (0.2 * rightPaddleH) &&
-        ballY < rightPaddleY + (1.2 * rightPaddleH)) {
+    if (ballX > rightPaddleX - (rightPaddleW/2) &&
+        ballX < rightPaddleX + (rightPaddleW/2) &&
+        ballY > rightPaddleY - (0.1 * rightPaddleH) &&
+        ballY < rightPaddleY + (1.1 * rightPaddleH)) {
         ballSpeedX = -ballSpeedX;
 
             var deltaY = ballY - (rightPaddleY + rightPaddleH / 2);
@@ -144,14 +149,14 @@ function moveAll() {
             ballReset();
         }
 
-    if (ballX < 0 + leftPaddleX + (2 * leftPaddleW) &&
-        ballX > 0 + leftPaddleX + leftPaddleW &&
-        ballY > leftPaddleY - (0.2 * leftPaddleH) &&
-        ballY < leftPaddleY + (1.2 * leftPaddleH)) {
+    if (ballX < 0 + leftPaddleX + (1.5 * leftPaddleW) &&
+        ballX > 0 + leftPaddleX + (0.5 *leftPaddleW) &&
+        ballY > leftPaddleY - (0.1 * leftPaddleH) &&
+        ballY < leftPaddleY + (1.1 * leftPaddleH)) {
             ballSpeedX = -ballSpeedX;
 
             var deltaY = ballY - (leftPaddleY + leftPaddleH / 2);
-            ballSpeedY = deltaY * 0.3;
+            ballSpeedY = deltaY * 0.15;
 
         } else if(ballX < 0 + leftPaddleX + leftPaddleW &&
                   ballX > 0) {
@@ -189,17 +194,19 @@ function drawAll() {
     //Draw left paddle and score
     roundRect(leftPaddleX, leftPaddleY, leftPaddleW, leftPaddleH, 10, 'white');
     textImpact(rightScore[0], 390, 225, '300px', 'white','right'); // This game
-    textImpact(rightScore[1], 380, 45, '50px', 'black','right');  // Game counter
+    //textImpact(rightScore[1], 380, 45, '50px', 'black','right');  // Game counter
 
     //Draw right paddle and score
     roundRect(rightPaddleX, rightPaddleY, rightPaddleW, rightPaddleH, 10, 'white');
     textImpact(leftScore[0], canvas.width-390, 625, '300px', 'white', 'left'); // This game
-    textImpact(leftScore[1], canvas.width-380, 600, '50px', 'black', 'left');  // Game counter
+    //textImpact(leftScore[1], canvas.width-380, 600, '50px', 'black', 'left');  // Game counter
+    textImpact("Level: " + level, 400, 50, '40px', 'goldenrod', 'center');
+    textImpact("[ Best: " + accumulator + " ]", 400, 75, '20px', 'goldenrod', 'center');
 
     switch (showingWinScreen) {
 
         case 1:
-            textArial("Player 1 wins!", 420, 45, '40px', 'white', 'left');
+            textArial("Player 1 wins!", 420, 100, '40px', 'white', 'left');
             textArial("Click to play again!", 400, 325, '50px', 'lawngreen', 'center');
             return;
             break;
