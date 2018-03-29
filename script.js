@@ -202,19 +202,16 @@ function drawAll() {
     textImpact(p1Score[0], canvas.width - 390, 625, '300px', 'white', 'left');
     textImpact("Level: " + gameLevel, 400, 50, '40px', 'goldenrod', 'center', 'white', 5);
     textImpact("Best: " + gameLevelHighest, 400, 75, '20px', 'white', 'center', 'black', 3);
-    
-    if (winScreen == 1 || 2) {
-        textImpact(p2Score[0], 390, 225, '300px', 'black', 'right', 'white', 1);
-        textImpact(p1Score[0], canvas.width - 390, 625, '300px', 'black', 'left', 'white', 1);
-    }
-    
+
     if (winScreen == 1) {
         textArial("Player 1 wins!", 420, 250, '40px', 'white', 'left');
         textArial("Click to play again!", 400, 325, '50px', 'lawngreen', 'center');
-        return;
     } else if (winScreen == 2) {
         textArial("Player 2 wins!", 380, 580, '40px', 'white', 'right');
         textArial("Click to play again!", 400, 325, '50px', 'lawngreen', 'center');
+    } else {
+        textImpact(p2Score[0], 390, 225, '300px', 'black', 'right', 'white', 1);
+        textImpact(p1Score[0], canvas.width - 390, 625, '300px', 'black', 'left', 'white', 1);
         return;
     }
 
