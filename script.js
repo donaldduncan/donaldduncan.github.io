@@ -78,7 +78,7 @@ window.onload = function () {
         });
 
     canvas.addEventListener('mousedown', handleMouseClick);
-    //canvas.addEventListener('touchstart', handleMouseClick, true);
+    canvas.addEventListener('touchstart', handleMouseClick, true);
 
     canvas.addEventListener('touchmove', function (evt) {
         var touchobj = evt.touches[0];
@@ -88,7 +88,7 @@ window.onload = function () {
         //rightPaddleY = parseInt(touchobj.clientY);
 
         evt.preventDefault();
-    });
+    }, true);
 }
 function ballReset() {
     if (rightScore[0] >= WINNING_SCORE) {
