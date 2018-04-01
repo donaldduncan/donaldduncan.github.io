@@ -99,7 +99,7 @@ function ballReset() {
     if (p1Score[0] >= WINNING_SCORE) {
         p1Score[1]++
         gameLevel++
-        ballSpeedX-=0.1;
+        ballSpeedX-=0.2;
         if (gameLevel > gameLevelHighest) { gameLevelHighest++ }
         winScreen = 1;
     } else if (p2Score[0] >= WINNING_SCORE) {
@@ -120,9 +120,9 @@ function ballReset() {
 function p2movement() {
     let p2Ycentre = p2Y + p2H / 2;
     if (p2Ycentre < ballY - 35) {
-        p2Y += gameLevel * gameLevelMultiplier;
+        p2Y += (gameLevel/2) * gameLevelMultiplier;
     } else if (p2Ycentre > ballY + 35) {
-        p2Y -= gameLevel * gameLevelMultiplier;
+        p2Y -= (gameLevel/2) * gameLevelMultiplier;
     }
 }
 
